@@ -40,9 +40,7 @@ fn main() {
 
     let output = Command::new("sh")
         .arg("-c")
-        .arg("\"$@\"")
-        .arg("sh")
-        .args(cmd_args)
+        .arg(cmd_args.join(" "))
         .output()
         .expect("Failed to execute command");
 
