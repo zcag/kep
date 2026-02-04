@@ -1,7 +1,12 @@
 [package]
 name = "kep"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
+description = "Cache any command output"
+license = "MIT"
+repository = "https://github.com/zcag/kep"
+keywords = ["cli", "cache", "command"]
+categories = ["command-line-utilities", "caching"]
 
 [dependencies]
 dirs = "6"
