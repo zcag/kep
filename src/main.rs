@@ -87,13 +87,12 @@ fn get_cache_path(cmd: &[String]) -> PathBuf {
 
     let mut hasher = DefaultHasher::new();
     cmd.hash(&mut hasher);
-    let hash = hasher.finish();
+    let hash = format!("{:x}", hasher.finish());
 
     dirs::cache_dir()
         .unwrap_or_else(|| "/tmp".into())
         .join("kep")
-        .join(key)
-        .join(format!("{:x}", hash))
+        .join(format!("{}_{}", key, hash))
 }
 
 
