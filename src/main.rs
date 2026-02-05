@@ -1,3 +1,4 @@
+use regex::Regex;
 use std::collections::hash_map::DefaultHasher;
 use std::env;
 use std::fs;
@@ -5,6 +6,7 @@ use std::hash::{Hash, Hasher};
 use std::io::{self, Write};
 use std::process::Command;
 use std::time::{Duration, SystemTime};
+use std::path::PathBuf;
 
 const HELP: &str = "\
 Cache any command output.
@@ -74,7 +76,15 @@ fn parse_duration(s: &str) -> Option<Duration> {
     Some(Duration::from_secs(secs))
 }
 
-fn get_cache_path(cmd: &[String]) -> std::path::PathBuf {
+fn get_cache_path(cmd: &[String]) -> PathBuf {
+    let re = Regex::new(r"[^a-zA-Z0-9._-]+").unwrap();
+
+    let key = cmd
+        .iter()
+        .map(|c| re.replace_all(c, "_"))
+        .collect::<Vec<_>>()
+        .join("__");
+
     let mut hasher = DefaultHasher::new();
     cmd.hash(&mut hasher);
     let hash = hasher.finish();
@@ -82,8 +92,10 @@ fn get_cache_path(cmd: &[String]) -> std::path::PathBuf {
     dirs::cache_dir()
         .unwrap_or_else(|| "/tmp".into())
         .join("kep")
+        .join(key)
         .join(format!("{:x}", hash))
 }
+
 
 fn read_cache(path: &std::path::Path, max_age: Duration) -> Option<Vec<u8>> {
     let meta = fs::metadata(path).ok()?;
