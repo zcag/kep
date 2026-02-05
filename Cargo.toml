@@ -1,6 +1,6 @@
 [package]
 name = "kep"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2024"
 description = "Cache any command output"
 license = "MIT"
@@ -10,3 +10,4 @@ categories = ["command-line-utilities", "caching"]
 
 [dependencies]
 dirs = "6"
+regex = "1.12.3"
